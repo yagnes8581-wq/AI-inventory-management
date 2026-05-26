@@ -32,8 +32,5 @@ Built entirely in Python, this application features a locally hosted relational 
 * **Data Visualization:** Plotly Express
 * **Security:** Python `hashlib` (SHA-256)
 
-## ⚙️ Local Installation & Setup
 
-1. **Clone the repository:**
-   ```bash
    git clone [https://github.com/your-username/AI-Enterprise-Inventory.git](https://github.com/your-username/AI-Enterprise-Inventory.git)
