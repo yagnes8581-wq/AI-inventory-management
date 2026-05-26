@@ -31,6 +31,3 @@ Built entirely in Python, this application features a locally hosted relational 
 * **Data Processing & ML:** Pandas, NumPy
 * **Data Visualization:** Plotly Express
 * **Security:** Python `hashlib` (SHA-256)
-
-
-   git clone [https://github.com/your-username/AI-Enterprise-Inventory.git](https://github.com/your-username/AI-Enterprise-Inventory.git)
