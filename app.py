@@ -12,10 +12,107 @@ st.set_page_config(page_title="Inventory Analytics", page_icon="📦", layout="w
 
 st.markdown("""
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        html, body, [class*="css"] {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .stApp {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+        }
+        
+        [data-testid="stSidebar"] {
+            background-color: rgba(15, 23, 42, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
         div[role="radiogroup"] > label > div:first-of-type { display: none !important; }
-        div[role="radiogroup"] > label { padding: 10px 15px !important; background-color: transparent; border-radius: 8px !important; margin-bottom: 5px; cursor: pointer; }
-        div[role="radiogroup"] > label:hover { background-color: rgba(128, 128, 128, 0.2) !important; }
-        div[role="radiogroup"] > label p { font-size: 16px !important; font-weight: 500 !important; margin: 0 !important; }
+        div[role="radiogroup"] > label { 
+            padding: 12px 20px !important; 
+            background: rgba(255, 255, 255, 0.03); 
+            border-radius: 12px !important; 
+            margin-bottom: 8px; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        div[role="radiogroup"] > label:hover { 
+            background: rgba(255, 255, 255, 0.08) !important; 
+            transform: translateX(5px);
+            border-color: rgba(255,255,255,0.1);
+        }
+        div[role="radiogroup"] > label p { font-size: 15px !important; font-weight: 500 !important; margin: 0 !important; color: #e2e8f0; }
+        
+        [data-testid="metric-container"] {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        [data-testid="metric-container"]:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+        [data-testid="metric-container"] label {
+            color: #94a3b8 !important;
+            font-size: 14px !important;
+        }
+        [data-testid="metric-container"] div[data-testid="stMetricValue"] {
+            color: #f8fafc !important;
+            font-weight: 700 !important;
+        }
+        
+        .stButton>button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+        }
+        .stButton>button:hover {
+            box-shadow: 0 8px 15px -3px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        h1, h2, h3 {
+            background: -webkit-linear-gradient(45deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800 !important;
+            letter-spacing: -0.5px;
+        }
+        
+        .stTextInput>div>div>input, .stNumberInput>div>div>input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f8fafc;
+        }
+        .stTextInput>div>div>input:focus, .stNumberInput>div>div>input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+        
+        [data-testid="stForm"] {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -119,8 +216,7 @@ df = load_data()
 # 🚀 SECURE LOGIN SCREEN
 # ==========================================
 if not st.session_state.logged_in:
-    st.markdown("<h1 style='text-align: center; margin-top: 50px;'>Enterprise Inventory System</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: gray;'>Authorized Personnel Only</h4>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; padding-top: 8vh; padding-bottom: 2vh;'><h1 style='font-size: 4rem; font-weight: 800; margin-bottom: 0;'>Enterprise Inventory System</h1><p style='color: #94a3b8; font-size: 1.2rem; margin-top: 10px;'>Authorized Personnel Only</p></div>", unsafe_allow_html=True)
     st.write("")
     
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -195,18 +291,19 @@ else:
             
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("Total Products", len(df))
-            col2.metric("Predicted Revenue (30 Days)", f"${df['Predicted_Revenue'].sum():,.2f}")
+            col2.metric("Predicted Revenue (30 Days)", f"₹{df['Predicted_Revenue'].sum():,.2f}")
             col3.metric("Action Required", len(df[df['Status'] == 'Reorder Required']))
             col4.metric("Class A Items", len(df[df['ABC_Class'] == 'Class A']))
             
             st.markdown("---")
             col_chart1, col_chart2 = st.columns(2)
             with col_chart1:
-                fig_bar = px.bar(df.groupby('ABC_Class')['Predicted_Revenue'].sum().reset_index(), x='ABC_Class', y='Predicted_Revenue', color='ABC_Class', color_discrete_sequence=['#636EFA', '#00CC96', '#EF553B'], title="Predicted Revenue by Class")
-                fig_bar.update_layout(showlegend=False)
+                fig_bar = px.bar(df.groupby('ABC_Class')['Predicted_Revenue'].sum().reset_index(), x='ABC_Class', y='Predicted_Revenue', color='ABC_Class', color_discrete_sequence=['#60A5FA', '#34D399', '#F87171'], title="Predicted Revenue by Class")
+                fig_bar.update_layout(showlegend=False, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(family='Inter', color='#e2e8f0'), title_font=dict(size=18, family='Inter', color='#f8fafc'), margin=dict(t=50, l=0, r=0, b=0))
                 st.plotly_chart(fig_bar, use_container_width=True)
             with col_chart2:
-                fig_pie = px.pie(df['Status'].value_counts().reset_index(), names='Status', values='count', hole=0.4, color='Status', color_discrete_map={'Stock OK': '#00CC96', 'Reorder Required': '#EF553B'}, title="Current Stock Health")
+                fig_pie = px.pie(df['Status'].value_counts().reset_index(), names='Status', values='count', hole=0.6, color='Status', color_discrete_map={'Stock OK': '#34D399', 'Reorder Required': '#F87171'}, title="Current Stock Health")
+                fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(family='Inter', color='#e2e8f0'), title_font=dict(size=18, family='Inter', color='#f8fafc'), margin=dict(t=50, l=0, r=0, b=0))
                 st.plotly_chart(fig_pie, use_container_width=True)
 
             st.subheader("⚠️ Priority Reorder List")
